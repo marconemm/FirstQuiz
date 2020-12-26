@@ -11,6 +11,8 @@ class Question {
 //Creating the constants from HTML:
 const lbl_Question = document.getElementById("question");
 const lbl_answersLits = Array.from(document.getElementsByClassName("choice-text")); //convert to an Array
+const btn_prev = document.getElementById("btn_prev");
+const btn_next = document.getElementById("btn_next");
 
 //creating the variabes:
 let raffledQuestion = {};
@@ -49,6 +51,15 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     answeredQuestionsList = [];
     fillignLists(MAX_QUESTIONS);
     currentQuestion = getNewQuestion();
+    showingCurrentQuestion();
+
+    btn_prev.addEventListener('click', e => {
+        console.log('anterior');
+    });
+
+    btn_next.addEventListener('click', e => {
+        console.log('proxima!');
+    });
 
     lbl_answersLits.forEach(answer => {
 
@@ -71,6 +82,7 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
             //const newChoiceOptionClass = selectedAnswer === currentQuestion.correctAnswer ? 'correct' : 'incorrect';
             answeredQuestionsList.push(currentQuestion);
             currentQuestion = getNewQuestion();
+            showingCurrentQuestion();
         });
     });
 }; // startQuiz()
@@ -83,16 +95,19 @@ getNewQuestion = () => { //The function destined to raffle some question.
 
     const questionIndex = Math.floor(Math.random() * avaiableQuestionsList.length); //raffling a smaller random number than available Questions List's length.
     raffledQuestion = avaiableQuestionsList[questionIndex]; //selecting the raffled question.
-    lbl_Question.innerText = raffledQuestion.question;
-
-    for (let i = 0; i < lbl_answersLits.length; i++) {
-        lbl_answersLits[i].innerText = raffledQuestion.answers[i];
-    }
 
     acceptingAnswers = true; // changing the falg "acceptingAnswers".
     avaiableQuestionsList.splice(questionIndex, 1); //remove the raffled question from the avaiable list.
 
     return raffledQuestion;
 }
+
+showingCurrentQuestion = () => {
+    lbl_Question.innerText = currentQuestion.question;
+
+    for (let i = 0; i < lbl_answersLits.length; i++) {
+        lbl_answersLits[i].innerText = currentQuestion.answers[i];
+    }
+}; //showingCurrentQuestion( ... )
 
 startQuiz();
