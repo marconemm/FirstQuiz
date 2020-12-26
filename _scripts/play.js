@@ -4,6 +4,7 @@ class Question {
         this.question = question;
         this.correctAnswer = correctAnswer;
         this.answers = answers;
+        this.selectedAnswer = null;
     }
 };  
 
@@ -13,13 +14,15 @@ const lbl_answersLits = Array.from(document.getElementsByClassName("choice-text"
 
 //creating the variabes:
 let raffledQuestion = {};
-let acceptingAnswers = true;
+let acceptingAnswers = null;
 let score = null;
 let questionsList = null;
+let avaiableQuestionsList = null;
+let answeredQuestionsList = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 5;
 
 fillignLists = numerOfQuestions => { //A temp function destinated to fill the processes's lists;
     
@@ -32,46 +35,51 @@ fillignLists = numerOfQuestions => { //A temp function destinated to fill the pr
             answersList.push(answer);  
         }
         
-        questionsList.push(new Question(i, "Questão " + i,answersList,correctAnswer));   
+        avaiableQuestionsList.push(new Question(i, "Questão " + i,answersList,correctAnswer));   
     };
+
+    questionsList = [... avaiableQuestionsList]; //make a copy of the questions list.
 }; // fillignLists(numerOfQuestions)
 
 startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     score = 0;
     questionsList = [];
+    avaiableQuestionsList = [];
+    answeredQuestionsList = [];
     fillignLists(MAX_QUESTIONS);
     currentQuestion = getNewQuestion();
 }; // startQuiz()
 
 getNewQuestion = () => { //The function destined to raffle some question.
     
-    if(questionsList.length === 0){
-        // if true, goes to the "scores page" (./game/scores.html)
+    if(avaiableQuestionsList.length === 0){ // if true, goes to the "scores page" (./game/scores.html)
         return window.location.assign("./scores.html");
     }
 
-    const questionIndex = Math.floor(Math.random() * questionsList.length); //raffling a smaller random number than available Questions List's length.
-    raffledQuestion = questionsList[questionIndex]; //selecting the raffled question.
+    const questionIndex = Math.floor(Math.random() * avaiableQuestionsList.length); //raffling a smaller random number than available Questions List's length.
+    raffledQuestion = avaiableQuestionsList[questionIndex]; //selecting the raffled question.
     lbl_Question.innerText = raffledQuestion.question;
 
     for (let i = 0; i < lbl_answersLits.length; i++) {
         lbl_answersLits[i].innerText = raffledQuestion.answers[i];
     }
 
-    acceptingAnswers = false; // changing the falg "acceptingAnswers".
-    questionsList.splice(questionIndex,1); //remove the raffled question from the list.
+    acceptingAnswers = true; // changing the falg "acceptingAnswers".
+    avaiableQuestionsList.splice(questionIndex,1); //remove the raffled question from the avaiable list.
     
     return raffledQuestion;
 }
 
 lbl_answersLits.forEach(answer => { //adding the "click" event listener.
     answer.addEventListener('click', e => {
-       if (acceptingAnswers) return;
+       if (!acceptingAnswers) return;
        
-       acceptingAnswers = true; // changing the falg "acceptingAnswers".
+       acceptingAnswers = false; // changing the falg "acceptingAnswers".
        const selectedChoice = e.target;
-       const selectedAnswer = selectedChoice.dataset['number'];
-       getNewQuestion();
+       const selectedAnswer = Number(selectedChoice.dataset["number"]);
+       currentQuestion.selectedAnswer = selectedAnswer;
+       answeredQuestionsList.push(currentQuestion);
+       currentQuestion = getNewQuestion();
     });
 });
 
