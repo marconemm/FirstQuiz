@@ -18,6 +18,12 @@
     color: #fe5500;
 }
 
+.selected-answer {
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #fe5500;
+}
+
 .choice-option{
     color: #ffffff;
     background-color: #7f4d3b;
