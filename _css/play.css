@@ -4,7 +4,7 @@
     font-size: 1.2rem;
     border: 0.2rem solid #3df1f1;
     margin-bottom: 0.4rem;
-    width: 95vw;
+    width: 95%;
     border-radius: 1rem;
 }
 
@@ -29,4 +29,13 @@
 .choice-text{
     padding: 1.5rem 1.5rem;
     width: 100%;
+}
+
+/*Questions navigation Bar*/
+.navQuestionBar {
+    display: flex;
+}
+
+.navQuestionBar p {
+    margin: 3rem 1rem;
 }
