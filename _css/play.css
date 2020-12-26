@@ -1,4 +1,5 @@
-.choce-container {
+.choice-container {
+    color: #ffffff;
     display: flex;
     font-size: 1.2rem;
     border: 0.2rem solid #3df1f1;
@@ -7,22 +8,25 @@
     border-radius: 1rem;
 }
 
-.choce-container:hover{
+.choice-container:hover {
     cursor: pointer;
-    box-shadow: 0 0.4rem 0.4rem 0 #3df1f1;
+    box-shadow: 0 0.4rem 0.4rem 0 #7f4d3b;
     transform: translateY(-0.2rem);
-    transition: 150ms;
+    transition: 250ms;
     font-weight: bold;
+    background-color: #ffffff;
+    color: #fe5500;
 }
 
 .choice-option{
+    color: #ffffff;
+    background-color: #7f4d3b;
     margin: 0.3rem;
     padding: 1rem 1.5rem;
-    background-color: #7f4d3b;
-    color: #ffffff;
     border-radius: 0.5rem;
 }
 
 .choice-text{
-    padding: 1rem;
+    padding: 1.5rem 1.5rem;
+    width: 100%;
 }
