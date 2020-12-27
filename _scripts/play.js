@@ -23,7 +23,7 @@ let currentQuestion = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 5;
+const MAX_QUESTIONS = 3;
 
 //Creating the "Click" event listeners:
 btn_prev.addEventListener('click', e => { 
@@ -51,11 +51,11 @@ btn_next.addEventListener('click', e => {
 });
 
 lbl_answersLits.forEach(answer => {
-    answer.addEventListener('click', e => { //adding the "click" event listener.
-        const selectedChoice = e.target;
-        const answeredOption = Number(selectedChoice.dataset["number"]);
-        currentQuestion.selectedAnswer = answeredOption;
-        
+    answer.parentElement.addEventListener('click', e => { //adding the "click" event listener.
+    const selectedChoice = e.target;
+    const answeredOption = Number(selectedChoice.dataset["number"]);
+    currentQuestion.selectedAnswer = answeredOption;
+
         let isToPushQuestion = true;
         for (let i = 0; i < answeredQuestionsList.length; i++) {
             if (answeredQuestionsList[i].number === currentQuestion.number) {
