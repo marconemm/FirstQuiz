@@ -15,7 +15,6 @@ const btn_prev = document.getElementById("btn_prev");
 const btn_next = document.getElementById("btn_next");
 
 //creating the variabes:
-let raffledQuestion = {};
 let acceptingAnswers = null;
 let score = null;
 let questionsList = null;
@@ -25,7 +24,7 @@ let currentQuestion = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 5;
+const MAX_QUESTIONS = 9;
 
 fillignLists = numerOfQuestions => { //A temp function destinated to fill the processes's lists;
 
@@ -38,7 +37,7 @@ fillignLists = numerOfQuestions => { //A temp function destinated to fill the pr
             answersList.push(answer);
         }
 
-        avaiableQuestionsList.push(new Question(i, "Questão " + i, answersList, correctAnswer));
+        avaiableQuestionsList.push(new Question(i, '"Pergunta" da questão ' + i + ":", answersList, correctAnswer));
     };
 
     questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
@@ -50,15 +49,42 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     avaiableQuestionsList = [];
     answeredQuestionsList = [];
     fillignLists(MAX_QUESTIONS);
-    currentQuestion = getNewQuestion();
+    currentQuestion = getRandomQuestion();
     showingCurrentQuestion();
 
     btn_prev.addEventListener('click', e => {
-        console.log('anterior');
+        acceptingClicks = true; // changing the flag "acceptingClicks".
+
+        for (let i = 0; i < questionsList.length; i++) {
+
+            if (acceptingClicks && questionsList[i].number === currentQuestion.number) {
+                // const previousQuestion = getQuestionByID(i - 1);
+                const previousQuestion = questionsList[i - 1];
+                currentQuestion = previousQuestion;
+                showingCurrentQuestion();
+
+                if (previousQuestion.number === 1) {
+                    acceptingClicks = false; // changing the flag "acceptingClicks".
+                    btn_prev.disabled = true;
+                }
+
+            }
+        }
     });
 
     btn_next.addEventListener('click', e => {
-        console.log('proxima!');
+        currentQuestion = questionsList[currentQuestion.number];
+
+        if (currentQuestion !== undefined) {
+            btn_prev.disabled = false; // eneabling the "btn_prev".
+            showingCurrentQuestion();
+            console.log(currentQuestion.number);
+            console.log(questionsList.length);
+            if (currentQuestion.number === (questionsList.length)) {
+                console.log(currentQuestion);
+                btn_next.disabled = true;
+            }
+        }
     });
 
     lbl_answersLits.forEach(answer => {
@@ -67,7 +93,6 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
         if (currentQuestion.selectedAnswer === null) {
             answer.parentElement.classList.remove("selected-answer");
         } else if (currentQuestion.selectedAnswer === Number(answer.dataset["number"])) {
-            // console.log(" ******** DEBUG:");
             answer.parentElement.classList.add("selected-answer");
         }
 
@@ -81,13 +106,13 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
 
             //const newChoiceOptionClass = selectedAnswer === currentQuestion.correctAnswer ? 'correct' : 'incorrect';
             answeredQuestionsList.push(currentQuestion);
-            currentQuestion = getNewQuestion();
+            currentQuestion = getRandomQuestion();
             showingCurrentQuestion();
         });
     });
 }; // startQuiz()
 
-getNewQuestion = () => { //The function destined to raffle some question.
+getRandomQuestion = () => { //The function destined to raffle some question.
 
     if (avaiableQuestionsList.length === 0) { // if true, goes to the "scores page" (./game/scores.html)
         return window.location.assign("./scores.html");
@@ -100,7 +125,16 @@ getNewQuestion = () => { //The function destined to raffle some question.
     avaiableQuestionsList.splice(questionIndex, 1); //remove the raffled question from the avaiable list.
 
     return raffledQuestion;
-}
+}; // getRandomQuestion( ... ) 
+
+getQuestionByID = id => {
+    for (let j = 0; j < questionsList.length; j++) {
+        if (j === id) {
+            return questionsList[j];
+        }
+    }
+    return null;
+}; //getQuestionByID( ... )
 
 showingCurrentQuestion = () => {
     lbl_Question.innerText = currentQuestion.question;
