@@ -24,7 +24,32 @@ let currentQuestion = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 9;
+const MAX_QUESTIONS = 5;
+
+btn_prev.addEventListener('click', e => { //Creating the "Click" event listeners:
+    currentQuestion = questionsList[currentQuestion.number - 2];
+
+    if (currentQuestion !== undefined) {
+        btn_next.disabled = false; // eneabling the "btn_next".
+        showingCurrentQuestion();
+        if (currentQuestion.number === 1) {
+            btn_prev.disabled = true; // disabling the "btn_next".
+        }
+    }
+});
+
+btn_next.addEventListener('click', e => {
+    currentQuestion = questionsList[currentQuestion.number];
+
+    if (currentQuestion !== undefined) {
+        btn_prev.disabled = false; // eneabling the "btn_prev".
+        showingCurrentQuestion();
+        if (currentQuestion.number === (questionsList.length)) {
+            btn_next.disabled = true; // disabling the "btn_prev".
+        }
+    }
+});
+
 
 fillignLists = numerOfQuestions => { //A temp function destinated to fill the processes's lists;
 
@@ -49,43 +74,9 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     avaiableQuestionsList = [];
     answeredQuestionsList = [];
     fillignLists(MAX_QUESTIONS);
-    currentQuestion = getRandomQuestion();
+    //currentQuestion = getRandomQuestion();
+    currentQuestion = questionsList[0];
     showingCurrentQuestion();
-
-    btn_prev.addEventListener('click', e => {
-        acceptingClicks = true; // changing the flag "acceptingClicks".
-
-        for (let i = 0; i < questionsList.length; i++) {
-
-            if (acceptingClicks && questionsList[i].number === currentQuestion.number) {
-                // const previousQuestion = getQuestionByID(i - 1);
-                const previousQuestion = questionsList[i - 1];
-                currentQuestion = previousQuestion;
-                showingCurrentQuestion();
-
-                if (previousQuestion.number === 1) {
-                    acceptingClicks = false; // changing the flag "acceptingClicks".
-                    btn_prev.disabled = true;
-                }
-
-            }
-        }
-    });
-
-    btn_next.addEventListener('click', e => {
-        currentQuestion = questionsList[currentQuestion.number];
-
-        if (currentQuestion !== undefined) {
-            btn_prev.disabled = false; // eneabling the "btn_prev".
-            showingCurrentQuestion();
-            console.log(currentQuestion.number);
-            console.log(questionsList.length);
-            if (currentQuestion.number === (questionsList.length)) {
-                console.log(currentQuestion);
-                btn_next.disabled = true;
-            }
-        }
-    });
 
     lbl_answersLits.forEach(answer => {
 
@@ -103,8 +94,6 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
             const selectedAnswer = Number(selectedChoice.dataset["number"]);
             acceptingAnswers = false; // changing the falg "acceptingAnswers".
             currentQuestion.selectedAnswer = selectedAnswer;
-
-            //const newChoiceOptionClass = selectedAnswer === currentQuestion.correctAnswer ? 'correct' : 'incorrect';
             answeredQuestionsList.push(currentQuestion);
             currentQuestion = getRandomQuestion();
             showingCurrentQuestion();
@@ -126,15 +115,6 @@ getRandomQuestion = () => { //The function destined to raffle some question.
 
     return raffledQuestion;
 }; // getRandomQuestion( ... ) 
-
-getQuestionByID = id => {
-    for (let j = 0; j < questionsList.length; j++) {
-        if (j === id) {
-            return questionsList[j];
-        }
-    }
-    return null;
-}; //getQuestionByID( ... )
 
 showingCurrentQuestion = () => {
     lbl_Question.innerText = currentQuestion.question;
