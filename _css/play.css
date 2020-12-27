@@ -4,7 +4,7 @@
     font-size: 1.2rem;
     border: 0.2rem solid #3df1f1;
     margin-bottom: 0.4rem;
-    width: 95vw;
+    width: 95%;
     border-radius: 1rem;
 }
 
@@ -13,6 +13,12 @@
     box-shadow: 0 0.4rem 0.4rem 0 #7f4d3b;
     transform: translateY(-0.2rem);
     transition: 250ms;
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #fe5500;
+}
+
+.selected-answer {
     font-weight: bold;
     background-color: #ffffff;
     color: #fe5500;
@@ -29,4 +35,13 @@
 .choice-text{
     padding: 1.5rem 1.5rem;
     width: 100%;
+}
+
+/*Questions navigation Bar*/
+.navQuestionBar {
+    display: flex;
+}
+
+.navQuestionBar p {
+    margin: 3rem 2rem 0 0;
 }
