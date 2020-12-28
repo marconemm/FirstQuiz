@@ -1,5 +1,32 @@
+label {
+    font-size: 1.1rem;
+}
+
+#hud_container {
+    display: block;
+    width: 95%;
+    margin-bottom: 1rem;
+}
+
+#lbl_hud {
+    font-size: 1.4rem;
+    margin-left: 0.5rem;
+}
+
+#loadingBarBorder {
+    margin: auto;
+    width: 50%;
+    border: 1px solid #3df1f1;
+}
+
+#loadingBarContent {
+    background-color: #7f4d3b;
+    width: 99%;
+}
+
+
 #lbl_question {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 1.5rem;
 }
@@ -26,16 +53,22 @@
 
 .selected-answer {
     font-weight: bold;
+    font-style: italic;
     background-color: #ffffff;
     color: #fe5500;
 }
 
 .lbl_choiceOption {
+    font-size: 1.2rem;
     color: #ffffff;
     background-color: #7f4d3b;
     margin: 0.3rem;
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
+}
+
+.lbl_choiceOption:hover {
+    cursor: pointer;
 }
 
 .lbl_choiceText {

@@ -9,7 +9,8 @@ class Question {
 };
 
 //Creating the constants from HTML:
-const lbl_Question = document.getElementById("lbl_question");
+const lbl_hud = document.getElementById("lbl_hud");
+const lbl_question = document.getElementById("lbl_question");
 const lbl_answersLits = Array.from(document.getElementsByClassName("lbl_choiceText")); //convert to an Array
 const btn_prev = document.getElementById("btn_prev");
 const btn_next = document.getElementById("btn_next");
@@ -23,7 +24,7 @@ let currentQuestion = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 10;
 const WAIT_TIME = 1000;
 
 //Creating the "Click" event listeners:
@@ -83,14 +84,17 @@ fillignLists = numberOfQuestions => { //A temp function destinated to fill the p
         const answersList = [];
 
         for (let j = 1; j <= 4; j++) {
-            const answer = "Resposta " + j + " da questão " + i;
-            answersList.push(answer);
+            const lbl_answerTxt = `Resposta ${j} da questão ${i}`;
+            answersList.push(lbl_answerTxt);
         }
 
-        avaiableQuestionsList.push(new Question(i, '"Pergunta" da questão ' + i + ":", answersList, correctAnswer));
+        const lbl_questionTxt = `Qual a resposta para esta questão?`;
+
+        avaiableQuestionsList.push(new Question(i, lbl_questionTxt, answersList, correctAnswer));
     };
 
     questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
+     
 }; // fillignLists(numerOfQuestions)
 
 startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
@@ -121,7 +125,7 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
 
 showCurrentQuestion = () => {
     //updating HTML's texts:
-    lbl_Question.innerText = currentQuestion.question;
+    lbl_question.innerText = currentQuestion.question;
 
     for (let i = 0; i < lbl_answersLits.length; i++) {
         lbl_answersLits[i].innerText = currentQuestion.answers[i];
@@ -134,6 +138,8 @@ showCurrentQuestion = () => {
             answer.parentElement.classList.remove("selected-answer");
         }
     });
+
+    lbl_hud.innerText = `Questão: ${currentQuestion.number} de ${questionsList.length}`;
 }; //showCurrentQuestion( ... )
 
 startQuiz();
