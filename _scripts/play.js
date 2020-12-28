@@ -10,6 +10,8 @@ class Question {
 
 //Creating the constants from HTML:
 const lbl_hud = document.getElementById("lbl_hud");
+const progressBarContent = document.getElementById("loadingBarContent");
+const lbl_progressBar = document.getElementById("lbl_progressBar");
 const lbl_question = document.getElementById("lbl_question");
 const lbl_answersLits = Array.from(document.getElementsByClassName("lbl_choiceText")); //convert to an Array
 const btn_prev = document.getElementById("btn_prev");
@@ -36,8 +38,8 @@ btn_prev.addEventListener('click', e => {
         if (currentQuestion.number === 1) {
             btn_prev.disabled = true; // disabling the "btn_next".
         }
-        // setTimeout(showCurrentQuestion(),WAIT_TIME);
-        showCurrentQuestion();
+        // setTimeout(renderScreen(),WAIT_TIME);
+        renderScreen();
     }
 });
 
@@ -49,8 +51,8 @@ btn_next.addEventListener('click', e => {
         if (currentQuestion.number === (questionsList.length)) {
             btn_next.disabled = true; // disabling the "btn_prev".
         }
-        // setTimeout(showCurrentQuestion()   ,WAIT_TIME);
-        showCurrentQuestion();
+        // setTimeout(renderScreen()   ,WAIT_TIME);
+        renderScreen();
     }
 });
 
@@ -73,7 +75,7 @@ lbl_answersLits.forEach(answer => {
             currentQuestion.selectedAnswer = answeredOption;
             answeredQuestionsList.push(currentQuestion);
         }
-        showCurrentQuestion();
+        renderScreen();
     });
 });
 
@@ -105,7 +107,7 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     fillignLists(MAX_QUESTIONS);
     currentQuestion = questionsList[0];
     btn_prev.disabled = true;
-    showCurrentQuestion();
+    renderScreen();
 }; // startQuiz()
 
 /* getRandomQuestion = () => { //The function destined to raffle some question.
@@ -123,7 +125,7 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     return raffledQuestion;
 }; // getRandomQuestion( ... )  */
 
-showCurrentQuestion = () => {
+renderScreen = () => {
     //updating HTML's texts:
     lbl_question.innerText = currentQuestion.question;
 
@@ -140,6 +142,11 @@ showCurrentQuestion = () => {
     });
 
     lbl_hud.innerText = `Questão: ${currentQuestion.number} de ${questionsList.length}`;
-}; //showCurrentQuestion( ... )
+
+    //Updating the preogress bar:
+    const newWidth = (answeredQuestionsList.length/MAX_QUESTIONS)*100;
+    lbl_progressBar.innerText = `${newWidth}%`;
+    progressBarContent.style.width = `${newWidth}%`;
+}; //renderScreen( ... )
 
 startQuiz();
