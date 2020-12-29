@@ -27,7 +27,7 @@ let currentQuestion = null;
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 4;
+const MAX_QUESTIONS = 3;
 const WAIT_TIME = 1000;
 
 //Creating the "Click" event listeners:
@@ -78,7 +78,7 @@ lbl_answersLits.forEach(answer => {
                 else {
                     //console.log(`Nulling the answer from the question number ${currentQuestion.number}.`);
                     currentQuestion.selectedAnswer = null;
-                    answeredQuestionsList.splice(i,1); //removes the nulled aswer from answeredQuestionsList.
+                    answeredQuestionsList.splice(i,1); //removes the nulled answer from answeredQuestionsList.
                 }
 
                 break;
@@ -159,15 +159,15 @@ renderScreen = () => {
     lbl_hud.innerText = `Questão: ${currentQuestion.number} de ${questionsList.length}`;
 
     //Updating the preogress bar:
-    const newWidth = (answeredQuestionsList.length / MAX_QUESTIONS) * 100;
+    const newWidth = Math.round((answeredQuestionsList.length / MAX_QUESTIONS) * 100);
     lbl_progressBar.innerText = `${newWidth}%`;
     progressBarContent.style.width = `${newWidth}%`;
     
     if (answeredQuestionsList.length === MAX_QUESTIONS) {
-        console.log("All the questions has aswers.\nEneabling the btn_finish");
+        //console.log("All the questions has aswers.\nEneabling the btn_finish");
         btn_finish.hidden = false;
     } else if (!btn_finish.hidden) {
-        console.log(`some question isn't aswered.\nHidding the btn_finish.`);
+        //console.log(`some question isn't aswered.\nHidding the btn_finish.`);
         btn_finish.hidden = true;
     }
 }; //renderScreen( ... )
