@@ -2,6 +2,7 @@ label {
     font-size: 1.1rem;
 }
 
+/* HUD's Styling properties: */
 #hud_container {
     display: block;
     width: 95%;

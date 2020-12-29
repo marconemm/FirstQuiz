@@ -30,7 +30,7 @@ const MAX_QUESTIONS = 10;
 const WAIT_TIME = 1000;
 
 //Creating the "Click" event listeners:
-btn_prev.addEventListener('click', e => { 
+btn_prev.addEventListener('click', e => {
     currentQuestion = questionsList[currentQuestion.number - 2];
 
     if (currentQuestion !== undefined) {
@@ -58,21 +58,35 @@ btn_next.addEventListener('click', e => {
 
 lbl_answersLits.forEach(answer => {
     answer.parentElement.addEventListener('click', e => { //adding the "click" event listener.
-    const selectedChoice = e.target;
-    const answeredOption = Number(selectedChoice.dataset["number"]);
-    currentQuestion.selectedAnswer = answeredOption;
+        const selectedChoice = e.target;
+        const answeredOption = Number(selectedChoice.dataset["number"]);
+
 
         let isToPushQuestion = true;
+
         for (let i = 0; i < answeredQuestionsList.length; i++) {
-            if (answeredQuestionsList[i].number === currentQuestion.number) {
+
+            if (answeredQuestionsList[i].number === currentQuestion.number) { //Updates the answeres questions list:
                 isToPushQuestion = false;
-                currentQuestion.selectedAnswer = answeredOption;
+
+                if (currentQuestion.selectedAnswer === null || answeredOption !== currentQuestion.selectedAnswer) {
+                    //console.log(`Updating the answer ${answeredOption} to the question number ${currentQuestion.number}.`);
+                    currentQuestion.selectedAnswer = answeredOption;
+                    answeredQuestionsList[i].selectedAnswer = answeredOption;
+                }
+                else {
+                    //console.log(`Nulling the answer from the question number ${currentQuestion.number}.`);
+                    currentQuestion.selectedAnswer = null;
+                    answeredQuestionsList[i].selectedAnswer = null;
+                }
+
                 break;
             }
         }
 
         if (isToPushQuestion) {
-            currentQuestion.selectedAnswer = answeredOption;
+            console.log(`Pushing the question number ${currentQuestion.number}. into answered questions list.`);
+            currentQuestion.selectedAnswer = answeredOption; //updates the asweredOption.
             answeredQuestionsList.push(currentQuestion);
         }
         renderScreen();
@@ -96,7 +110,7 @@ fillignLists = numberOfQuestions => { //A temp function destinated to fill the p
     };
 
     questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
-     
+
 }; // fillignLists(numerOfQuestions)
 
 startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
@@ -144,7 +158,7 @@ renderScreen = () => {
     lbl_hud.innerText = `Questão: ${currentQuestion.number} de ${questionsList.length}`;
 
     //Updating the preogress bar:
-    const newWidth = (answeredQuestionsList.length/MAX_QUESTIONS)*100;
+    const newWidth = (answeredQuestionsList.length / MAX_QUESTIONS) * 100;
     lbl_progressBar.innerText = `${newWidth}%`;
     progressBarContent.style.width = `${newWidth}%`;
 }; //renderScreen( ... )
