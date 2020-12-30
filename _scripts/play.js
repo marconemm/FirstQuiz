@@ -57,6 +57,12 @@ btn_next.addEventListener('click', e => {
     }
 });
 
+btn_finish.addEventListener('click', e => {
+    if (answeredQuestionsList.length === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
+        return window.location.assign("./scores.html");
+    }
+});
+
 lbl_answersLits.forEach(answer => {
     answer.parentElement.addEventListener('click', e => { //adding the "click" event listener.
         const selectedChoice = e.target;
