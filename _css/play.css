@@ -1,7 +1,3 @@
-label {
-    font-size: 1.1rem;
-}
-
 /* HUD's Styling properties: */
 #hud_container {
     display: block;
@@ -75,13 +71,4 @@ label {
 .lbl_choiceText {
     padding: 1.5rem 1.5rem;
     width: 100%;
-}
-
-/*Questions navigation Bar*/
-.navQuestionBar {
-    display: flex;
-}
-
-.navQuestionBar p {
-    margin: 3rem 2rem 0 0;
 }

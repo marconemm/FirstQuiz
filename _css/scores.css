@@ -1,0 +1,38 @@
+.resultBox {
+    width: 95%;
+    border: 1px solid #ffffff;
+}
+
+#resultGreeting {
+    margin-bottom: 1rem;
+}
+
+#scoresTable {
+    width: 90%;
+    margin: 2rem auto;
+    border: 0.25rem solid #3df1f1;
+    border-collapse: collapse;
+}
+
+#scoresTable th {
+    border: 0.2rem solid #3df1f1;
+    padding: 0.5rem;
+    background-color: #7f4d3b;
+    color: #ffffff;
+    font-size: 1.2rem;
+  }
+
+#scoresTable td {
+    border: 0.1rem solid #3df1f1;
+    padding: 0.4rem;
+    font-size: 1.1rem;
+
+}
+
+#scoresTable tr:nth-child(even) {
+    background-color: rgb(127, 77, 59, 0.4);
+}
+
+#scoresTable tr:hover {
+    background-color: rgb(61, 241, 241, 0.6);
+}
