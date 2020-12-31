@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Primeiro Quiz</title>
     <link rel="stylesheet" href="/_css/styles.css">
+    <link rel="stylesheet" href="/_css/home.css">
 </head>
+
 <body>
     <div class="container">
-        <div id="home" class="flex_center flex_column">
+        <main id="home" class="flex_center flex_column">
             <h1>Meu primeiro Quiz</h1>
-            <a href="/game/play.html" class="btn">Jogar</a>
-            <a href="/game/highScores.html" class="btn">Placares</a>
-        </div>
+            <asside id="playerData">
+                <label for="txtBox_playerName">Qual o seu nome?</label>
+                <input type="text" name="txtBox_playerName" id="txtBox_playerName" placeholder="Nome">
+            </asside>
+            <button type="submit" class="btn" id="btn_play" onclick="startQuiz()" disabled>Jogar</button>
+            <!-- <a href="/game/play.html" class="btn">Jogar</a> -->
+            <a href="/game/scores.html" class="btn">Placares</a>
+        </main>
     </div>
+    <script src="/_scripts/home.js"></script>
 </body>
+
 </html>
