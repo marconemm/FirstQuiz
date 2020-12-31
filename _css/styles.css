@@ -13,9 +13,8 @@
     text-align: center;
 }
 
-h1,h2,h3,h4 {
+h1,h2,h3 {
     color: #ffffff;
-    margin-bottom: 2rem;
 }
 
 /*Utilities*/
@@ -53,7 +52,20 @@ h1,h2,h3,h4 {
     display: none;
 }
 
-/*Buttons*/
+label {
+    font-size: 1.1rem;
+}
+
+/*Questions navigation Bar*/
+.navQuestionBar {
+    display: flex;
+}
+
+.navQuestionBar p {
+    margin: 3rem 2rem 0 0;
+}
+
+/*Buttons styling properties:*/
 
 .btn {
     border-radius: 1rem;
