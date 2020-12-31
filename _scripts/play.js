@@ -25,6 +25,9 @@ let avaiableQuestionsList = null;
 let answeredQuestionsList = null;
 let currentQuestion = null;
 
+// const playerName = JSON.parse(sessionStorage.getItem("playerName"));
+// console.log(playerName);
+
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
 const MAX_QUESTIONS = 3;
@@ -120,7 +123,7 @@ fillignLists = numberOfQuestions => { //A temp function destinated to fill the p
 
 }; // fillignLists(numerOfQuestions)
 
-startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
+resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     score = 0;
     questionsList = [];
     avaiableQuestionsList = [];
@@ -129,7 +132,7 @@ startQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     currentQuestion = questionsList[0];
     btn_prev.disabled = true;
     renderScreen();
-}; // startQuiz()
+}; // resetQuiz()
 
 /* getRandomQuestion = () => { //The function destined to raffle some question.
 
@@ -178,4 +181,4 @@ renderScreen = () => {
     }
 }; //renderScreen( ... )
 
-startQuiz();
+resetQuiz();
