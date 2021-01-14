@@ -15,7 +15,14 @@
             <h1>Meu primeiro Quiz</h1>
             <asside id="playerData">
                 <label for="txtBox_playerName">Qual o seu nome?</label>
-                <input type="text" name="txtBox_playerName" id="txtBox_playerName" placeholder="Nome">
+                <input class="txt_style" type="text" name="txtBox_playerName" id="txtBox_playerName" placeholder="Nome">
+                <label for="dificultSelector">Escolha uma dificuldade:</label>
+                <select class="txt_style" name="dificultSelector" id="dificultSelector">
+                    <option class="txt_style" value="all">Todas</option>
+                    <option class="txt_style" value="easy">Fácil</option>
+                    <option class="txt_style" value="medium">Moderada</option>
+                    <option class="txt_style" value="hard">Difícil</option>
+                </select>
             </asside>
             <button type="submit" class="btn" id="btn_play" onclick="startQuiz()" disabled>Jogar</button>
             <!-- <a href="/game/play.html" class="btn">Jogar</a> -->
