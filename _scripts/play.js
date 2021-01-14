@@ -1,3 +1,9 @@
+class Player {
+    constructor (name){
+        this.name = name;
+    }
+}
+
 class Question {
     constructor(number, question, answers, correctAnswer) {
         this.number = number;
@@ -25,13 +31,14 @@ let avaiableQuestionsList = null;
 let answeredQuestionsList = null;
 let currentQuestion = null;
 
-// const playerName = JSON.parse(sessionStorage.getItem("playerName"));
-// console.log(playerName);
+// creating the Objects:
+const player = new Player(JSON.parse(sessionStorage.getItem("playerName")));
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
-const MAX_QUESTIONS = 3;
+const MAX_QUESTIONS = 10;
 const WAIT_TIME = 1000;
+const CATEGORIES_URL = "https://opentdb.com/api_category.php";
 
 //Creating the "Click" event listeners:
 btn_prev.addEventListener('click', e => {
@@ -103,7 +110,35 @@ lbl_answersLits.forEach(answer => {
     });
 });
 
-fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
+const fetchQuestions = async (amount, difficulty) => {
+    const trivia_categories = await fetch(CATEGORIES_URL) //fetch a response promisse form "CATEGORIES_URL"
+        .then(response => response.json()) // parse the response rpomisse to a JSON promisse
+        .then(jsonPromisse => { // get and reduce it to the "categoriesOptionsList":
+            
+            return jsonPromisse.trivia_categories;
+
+        });
+
+    //raffle a category:
+    const raffledIndex = Math.round(Math.random() * trivia_categories.length);
+    const raffledCategory = trivia_categories[raffledIndex].id;
+    
+    //fetch the "triviaQuestionsList":
+    const TRIVIA_ADRESS = `https://opentdb.com/api.php?amount=${amount}&category=${raffledCategory}&difficulty=${difficulty.toLowerCase()}&type=multiple`;
+    const triviaQuestionsList = await fetch(TRIVIA_ADRESS)
+        .then(response => response.json())
+        .then(jsonPromisse => {
+            
+            return jsonPromisse.results;
+
+        });
+    console.log(triviaQuestionsList);
+    
+}; //fetchQuestions
+
+fetchQuestions(MAX_QUESTIONS,"Easy");
+
+const fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
 
     for (let i = 1; i <= numberOfQuestions; i++) {
         const correctAnswer = Math.floor(Math.random() * 4);
@@ -123,7 +158,7 @@ fillignLists = numberOfQuestions => { //A temp function destinated to fill the p
 
 }; // fillignLists(numerOfQuestions)
 
-resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
+const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     score = 0;
     questionsList = [];
     avaiableQuestionsList = [];
@@ -149,7 +184,7 @@ resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     return raffledQuestion;
 }; // getRandomQuestion( ... )  */
 
-renderScreen = () => {
+const renderScreen = () => {
     //updating HTML's texts:
     lbl_question.innerText = currentQuestion.question;
 

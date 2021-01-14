@@ -3,19 +3,20 @@
     margin: 1rem auto;
 }
 
-#playerName {
+#txtBox_playerName {
     width: 15rem;
     height: 2rem;
     border-radius: 0.4rem;
     margin-top: 0.3rem;
 }
 
-#playerName::placeholder {
+#txtBox_playerName::placeholder {
     color: #fe5500;
 
 }
 
-#playerName:focus {
+#txtBox_playerName:focus {
     color: #ffffff;
-    background-color: #7f4d3b
+    background-color: #7f4d3b;
+    outline: 0;
 }
