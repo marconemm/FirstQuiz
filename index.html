@@ -16,16 +16,22 @@
             <asside id="playerData">
                 <label for="txtBox_playerName">Qual o seu nome?</label>
                 <input class="txt_style" type="text" name="txtBox_playerName" id="txtBox_playerName" placeholder="Nome">
-                <label for="dificultSelector">Escolha uma dificuldade:</label>
-                <select class="txt_style" name="dificultSelector" id="dificultSelector">
+                <label for="difficultySelector">Escolha uma dificuldade:</label>
+                <select class="txt_style" name="difficultySelector" id="difficultySelector">
                     <option class="txt_style" value="all">Todas</option>
                     <option class="txt_style" value="easy">Fácil</option>
                     <option class="txt_style" value="medium">Moderada</option>
                     <option class="txt_style" value="hard">Difícil</option>
                 </select>
+                <label for="rbRandCategory">Tipo da(s) categoria(s):</label>
+                <label for="rbRandCategory">
+                    <input type="radio" name="rbRandCategory" id="rbRandCategory" checked>Aleatória
+                </label>
+                <label for="rbRandCategory">
+                    <input type="radio" name="rbRandCategory" id="rbRandCategory">Única
+                </label>    
             </asside>
             <button type="submit" class="btn" id="btn_play" onclick="startQuiz()" disabled>Jogar</button>
-            <!-- <a href="/game/play.html" class="btn">Jogar</a> -->
             <a href="/game/scores.html" class="btn">Placares</a>
         </main>
     </div>

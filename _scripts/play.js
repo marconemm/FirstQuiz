@@ -33,6 +33,10 @@ let currentQuestion = null;
 
 // creating the Objects:
 const player = new Player(JSON.parse(sessionStorage.getItem("playerName")));
+const session = {
+    difficulty: JSON.parse(sessionStorage.getItem("difficulty")),
+    isRandomCategory: JSON.parse(sessionStorage.getItem("isRandomCategory"))
+};
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
@@ -111,11 +115,11 @@ lbl_answersLits.forEach(answer => {
 });
 
 const fetchQuestions = async (amount, difficulty) => {
-    const trivia_categories = await fetch(CATEGORIES_URL) //fetch a response promisse form "CATEGORIES_URL"
-        .then(response => response.json()) // parse the response rpomisse to a JSON promisse
-        .then(jsonPromisse => { // get and reduce it to the "categoriesOptionsList":
+    const trivia_categories = await fetch(CATEGORIES_URL) //fetch a response promise form "CATEGORIES_URL"
+        .then(response => response.json()) // parse the response rpomisse to a JSON promise
+        .then(jsonPromise => { // get and reduce it to the "categoriesOptionsList":
             
-            return jsonPromisse.trivia_categories;
+            return jsonPromise.trivia_categories;
 
         });
 
@@ -124,19 +128,22 @@ const fetchQuestions = async (amount, difficulty) => {
     const raffledCategory = trivia_categories[raffledIndex].id;
     
     //fetch the "triviaQuestionsList":
-    const TRIVIA_ADRESS = `https://opentdb.com/api.php?amount=${amount}&category=${raffledCategory}&difficulty=${difficulty.toLowerCase()}&type=multiple`;
+    const TRIVIA_ADRESS = session.isRandomCategory ?
+    `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`:
+    `https://opentdb.com/api.php?amount=${amount}&category=${raffledCategory}&difficulty=${difficulty.toLowerCase()}&type=multiple`;
+    
     const triviaQuestionsList = await fetch(TRIVIA_ADRESS)
         .then(response => response.json())
-        .then(jsonPromisse => {
+        .then(jsonPromise => {
             
-            return jsonPromisse.results;
+            return jsonPromise.results;
 
         });
     console.log(triviaQuestionsList);
     
 }; //fetchQuestions
 
-fetchQuestions(MAX_QUESTIONS,"Easy");
+fetchQuestions(MAX_QUESTIONS, session.difficulty);
 
 const fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
 
