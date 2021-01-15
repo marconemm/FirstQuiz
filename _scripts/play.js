@@ -5,12 +5,12 @@ class Player {
 }
 
 class Question {
-    constructor(number, question, answers, correctAnswer) {
-        this.number = number;
-        this.question = question;
+    constructor(questionTxt, incorrectAnswers, correctAnswer) {
+        this.questionNumber = undefined;
+        this.questionTxt = questionTxt;
         this.correctAnswer = correctAnswer;
-        this.answers = answers;
-        this.selectedAnswer = null;
+        this.answersList = incorrectAnswers;
+        this.selectedAnswer = undefined;
     }
 };
 
@@ -25,18 +25,17 @@ const btn_next = document.getElementById("btn_next");
 const btn_finish = document.getElementById("btn_finish");
 
 //creating the variabes:
-let score = null;
-let questionsList = null;
-let avaiableQuestionsList = null;
-let answeredQuestionsList = null;
-let currentQuestion = null;
+let score;
+let questionsList;
+let avaiableQuestionsList;
+let answeredQuestionsList;
+let currentQuestion;
+let raffledCategory;
+const difficulty = JSON.parse(sessionStorage.getItem("difficulty"));
+const isRandomCategory = JSON.parse(sessionStorage.getItem("isRandomCategory"));
 
 // creating the Objects:
 const player = new Player(JSON.parse(sessionStorage.getItem("playerName")));
-const session = {
-    difficulty: JSON.parse(sessionStorage.getItem("difficulty")),
-    isRandomCategory: JSON.parse(sessionStorage.getItem("isRandomCategory"))
-};
 
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
@@ -78,7 +77,7 @@ btn_finish.addEventListener('click', e => {
 });
 
 lbl_answersLits.forEach(answer => {
-    answer.parentElement.addEventListener('click', e => { //adding the "click" event listener.
+    answer.parentElement.addEventListener('click', e => { //adding the "click" event listener on the answer container (the parent).
         const selectedChoice = e.target;
         const answeredOption = Number(selectedChoice.dataset["number"]);
 
@@ -114,21 +113,50 @@ lbl_answersLits.forEach(answer => {
     });
 });
 
-const fetchQuestions = async (amount, difficulty) => {
+const mapQuestionsList = async fetchResult => {
+
+    questionsList = await fetchResult.map(question => {
+        
+        return new Question(question.question, question.incorrect_answers, question.correct_answer);
+        
+    });
+    
+    questionsList.forEach(question => { // insert the correct answer in an answersList's random index:
+        const index = Math.floor(Math.random() * (question.answersList.length + 1));
+        question.answersList.splice(index,0,question.correctAnswer);
+    });
+
+    for (let i = 0; i < questionsList.length; i++) {
+       
+        questionsList[i].questionNumber = i + 1;
+        
+    }
+    
+    currentQuestion = questionsList[0];
+    renderScreen();
+
+}; //mapQuestionsList
+
+const raflleCategory = async () => {
+    
     const trivia_categories = await fetch(CATEGORIES_URL) //fetch a response promise form "CATEGORIES_URL"
-        .then(response => response.json()) // parse the response rpomisse to a JSON promise
-        .then(jsonPromise => { // get and reduce it to the "categoriesOptionsList":
-            
-            return jsonPromise.trivia_categories;
-
+        .then(response => response.json()) // parse the response promise to a JSON promise
+        .then(jsonPromise => { // raffle a category from the "jsonPromise":
+           
+            const raffledIndex = Math.round(Math.random() * jsonPromise.trivia_categories.length);
+            raffledCategory = jsonPromise.trivia_categories[raffledIndex].id;
+    
         });
+    
 
-    //raffle a category:
-    const raffledIndex = Math.round(Math.random() * trivia_categories.length);
-    const raffledCategory = trivia_categories[raffledIndex].id;
+}; //raflleCategory
+
+const fetchQuestions = async (amount, difficulty) => {
+
+    await raflleCategory(); //raflle a category
     
     //fetch the "triviaQuestionsList":
-    const TRIVIA_ADRESS = session.isRandomCategory ?
+    const TRIVIA_ADRESS = isRandomCategory ?
     `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`:
     `https://opentdb.com/api.php?amount=${amount}&category=${raffledCategory}&difficulty=${difficulty.toLowerCase()}&type=multiple`;
     
@@ -136,44 +164,43 @@ const fetchQuestions = async (amount, difficulty) => {
         .then(response => response.json())
         .then(jsonPromise => {
             
-            return jsonPromise.results;
-
+            mapQuestionsList(jsonPromise.results); //setup the questionsList according with the "mapQuestionsList"
+            
         });
-    console.log(triviaQuestionsList);
-    
+
 }; //fetchQuestions
 
-fetchQuestions(MAX_QUESTIONS, session.difficulty);
+fetchQuestions(MAX_QUESTIONS, difficulty);
 
-const fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
+// const fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
 
-    for (let i = 1; i <= numberOfQuestions; i++) {
-        const correctAnswer = Math.floor(Math.random() * 4);
-        const answersList = [];
+//     for (let i = 1; i <= numberOfQuestions; i++) {
+//         const correctAnswer = Math.floor(Math.random() * 4);
+//         const answersList = [];
 
-        for (let j = 1; j <= 4; j++) {
-            const lbl_answerTxt = `Resposta ${j} da questão ${i}`;
-            answersList.push(lbl_answerTxt);
-        }
+//         for (let j = 1; j <= 4; j++) {
+//             const lbl_answerTxt = `Resposta ${j} da questão ${i}`;
+//             answersList.push(lbl_answerTxt);
+//         }
 
-        const lbl_questionTxt = `Qual a resposta para esta questão?`;
+//         const lbl_questionTxt = `Qual a resposta para esta questão?`;
 
-        avaiableQuestionsList.push(new Question(i, lbl_questionTxt, answersList, correctAnswer));
-    };
+//         avaiableQuestionsList.push(new Question(i, lbl_questionTxt, answersList, correctAnswer));
+//     };
 
-    questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
+//     questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
 
-}; // fillignLists(numerOfQuestions)
+// }; // fillignLists(numerOfQuestions)
 
 const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
-    score = 0;
-    questionsList = [];
-    avaiableQuestionsList = [];
+    score = undefined;
+    questionsList = undefined;
+    avaiableQuestionsList = undefined;
     answeredQuestionsList = [];
-    fillignLists(MAX_QUESTIONS);
-    currentQuestion = questionsList[0];
+    //fillignLists(MAX_QUESTIONS);
+    //currentQuestion = questionsList[0];
     btn_prev.disabled = true;
-    renderScreen();
+    //renderScreen();
 }; // resetQuiz()
 
 /* getRandomQuestion = () => { //The function destined to raffle some question.
@@ -191,14 +218,14 @@ const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" functio
     return raffledQuestion;
 }; // getRandomQuestion( ... )  */
 
-const renderScreen = () => {
+const renderScreen = async () => {
     //updating HTML's texts:
-    lbl_question.innerText = currentQuestion.question;
-
+    lbl_question.innerText = currentQuestion.questionTxt;
+    
     for (let i = 0; i < lbl_answersLits.length; i++) {
-        lbl_answersLits[i].innerText = currentQuestion.answers[i];
+       lbl_answersLits[i].innerText = currentQuestion.answersList[i];
     }
-
+    
     lbl_answersLits.forEach(answer => { // Styling answers:
         if (currentQuestion.selectedAnswer === Number(answer.dataset["number"])) {
             answer.parentElement.classList.add("selected-answer");
@@ -207,7 +234,7 @@ const renderScreen = () => {
         }
     });
 
-    lbl_hud.innerText = `Questão: ${currentQuestion.number} de ${questionsList.length}`;
+    lbl_hud.innerText = `Questão: ${currentQuestion.questionNumber} de ${questionsList.length}`;
 
     //Updating the preogress bar:
     const newWidth = Math.round((answeredQuestionsList.length / MAX_QUESTIONS) * 100);
