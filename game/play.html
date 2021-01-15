@@ -23,23 +23,13 @@
                     </div>
                 </div>
             </asside>
-            <label for="home" id="lbl_question">Exemplo de pergunta.</label>
-            <div class="choice-container">
-                <label for="1" class="lbl_choiceOption" data-number="1">A</label>
-                <p class="lbl_choiceText" data-number="1" id="1">Answer 1</p>
-            </div>
-            <div class="choice-container">
-                <label for="2" class="lbl_choiceOption" data-number="2">B</label>
-                <p class="lbl_choiceText" data-number="2" id="2">Answer 2</p>
-            </div>
-            <div class="choice-container">
-                <label for="3" class="lbl_choiceOption" data-number="3">C</label>
-                <p class="lbl_choiceText" data-number="3" id="3">Answer 3</p>
-            </div>
-            <div class="choice-container">
-                <label for="4" class="lbl_choiceOption" data-number="4">D</label>
-                <p class="lbl_choiceText" data-number="4" id="4">Answer 4</p>
-            </div>
+            <section id="answersPanel">
+                <label for="home" id="lbl_question">Exemplo de pergunta.</label>
+                <div class="choice-container" data-option="1"></div>
+                <div class="choice-container" data-option="2"></div>
+                <div class="choice-container" data-option="3"></div>
+                <div class="choice-container" data-option="4"></div>
+            </section>
             <div class="navQuestionBar">
                 <a href="/" class="btn">Voltar</a>
                 <button id="btn_prev" class="btn">Anterior</button>
