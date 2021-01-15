@@ -27,8 +27,8 @@ const btn_finish = document.getElementById("btn_finish");
 //creating the variabes:
 let score;
 let questionsList;
-let avaiableQuestionsList;
-let answeredQuestionsList;
+//let avaiableQuestionsList;
+let answeredQuestions;
 let currentQuestion;
 let raffledCategory;
 const difficulty = JSON.parse(sessionStorage.getItem("difficulty"));
@@ -40,16 +40,15 @@ const player = new Player(JSON.parse(sessionStorage.getItem("playerName")));
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
 const MAX_QUESTIONS = 10;
-const WAIT_TIME = 1000;
 const CATEGORIES_URL = "https://opentdb.com/api_category.php";
 
 //Creating the "Click" event listeners:
 btn_prev.addEventListener('click', e => {
-    currentQuestion = questionsList[currentQuestion.number - 2];
-
+    currentQuestion = questionsList[currentQuestion.questionNumber - 2];
+    
     if (currentQuestion !== undefined) {
         btn_next.disabled = false; // eneabling the "btn_next".
-        if (currentQuestion.number === 1) {
+        if (currentQuestion.questionNumber === 1) {
             btn_prev.disabled = true; // disabling the "btn_next".
         }
         // setTimeout(renderScreen(),WAIT_TIME);
@@ -58,20 +57,19 @@ btn_prev.addEventListener('click', e => {
 });
 
 btn_next.addEventListener('click', e => {
-    currentQuestion = questionsList[currentQuestion.number];
+    currentQuestion = questionsList[currentQuestion.questionNumber];
 
     if (currentQuestion !== undefined) {
         btn_prev.disabled = false; // eneabling the "btn_prev".
-        if (currentQuestion.number === (questionsList.length)) {
+        if (currentQuestion.questionNumber === (questionsList.length)) {
             btn_next.disabled = true; // disabling the "btn_prev".
         }
-        // setTimeout(renderScreen()   ,WAIT_TIME);
         renderScreen();
     }
 });
 
 btn_finish.addEventListener('click', e => {
-    if (answeredQuestionsList.length === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
+    if (answeredQuestions === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
         return window.location.assign("./scores.html");
     }
 });
@@ -79,37 +77,38 @@ btn_finish.addEventListener('click', e => {
 lbl_answersLits.forEach(answer => {
     answer.parentElement.addEventListener('click', e => { //adding the "click" event listener on the answer container (the parent).
         const selectedChoice = e.target;
-        const answeredOption = Number(selectedChoice.dataset["number"]);
-
-
-        let isToPushQuestion = true;
-
-        for (let i = 0; i < answeredQuestionsList.length; i++) {
-
-            if (answeredQuestionsList[i].number === currentQuestion.number) { //Updates the answeres questions list:
-                isToPushQuestion = false;
-
-                if (currentQuestion.selectedAnswer === null || answeredOption !== currentQuestion.selectedAnswer) {
-                    //console.log(`Updating the answer ${answeredOption} to the question number ${currentQuestion.number}.`);
-                    currentQuestion.selectedAnswer = answeredOption;
-                    answeredQuestionsList[i].selectedAnswer = answeredOption;
-                }
-                else {
-                    //console.log(`Nulling the answer from the question number ${currentQuestion.number}.`);
-                    currentQuestion.selectedAnswer = null;
-                    answeredQuestionsList.splice(i,1); //removes the nulled answer from answeredQuestionsList.
-                }
-
-                break;
-            }
-        }
-
-        if (isToPushQuestion) {
-            // console.log(`Pushing the question number ${currentQuestion.number}. into answered questions list.`);
-            currentQuestion.selectedAnswer = answeredOption; //updates the asweredOption.
-            answeredQuestionsList.push(currentQuestion);
-        }
+        currentQuestion.selectedAnswer = Number(selectedChoice.dataset["number"]);
+        console.log("\n\n");
         renderScreen();
+        
+        // let isToPushQuestion = true;
+
+        // for (let i = 0; i < answeredQuestionsList.length; i++) {
+
+        //     if (answeredQuestionsList[i].number === currentQuestion.number) { //Updates the answeres questions list:
+        //         isToPushQuestion = false;
+
+        //         if (currentQuestion.selectedAnswer === null || answeredOption !== currentQuestion.selectedAnswer) {
+        //             //console.log(`Updating the answer ${answeredOption} to the question number ${currentQuestion.number}.`);
+        //             currentQuestion.selectedAnswer = answeredOption;
+        //             answeredQuestionsList[i].selectedAnswer = answeredOption;
+        //         }
+        //         else {
+        //             //console.log(`Nulling the answer from the question number ${currentQuestion.number}.`);
+        //             currentQuestion.selectedAnswer = null;
+        //             answeredQuestionsList.splice(i,1); //removes the nulled answer from answeredQuestionsList.
+        //         }
+
+        //         break;
+        //     }
+        // }
+
+        // if (isToPushQuestion) {
+        //     // console.log(`Pushing the question number ${currentQuestion.number}. into answered questions list.`);
+        //     currentQuestion.selectedAnswer = answeredOption; //updates the asweredOption.
+        //     answeredQuestionsList.push(currentQuestion);
+        // }
+        //renderScreen();
     });
 });
 
@@ -156,11 +155,18 @@ const fetchQuestions = async (amount, difficulty) => {
     await raflleCategory(); //raflle a category
     
     //fetch the "triviaQuestionsList":
-    const TRIVIA_ADRESS = isRandomCategory ?
-    `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`:
-    `https://opentdb.com/api.php?amount=${amount}&category=${raffledCategory}&difficulty=${difficulty.toLowerCase()}&type=multiple`;
+    const TRIVIA_API = `https://opentdb.com/api.php?amount=${amount}&type=multiple`;
+    let fetchUrl = "";
     
-    const triviaQuestionsList = await fetch(TRIVIA_ADRESS)
+    if (isRandomCategory && difficulty === "all") {
+        fetchUrl = TRIVIA_API;
+    } else if (isRandomCategory) {
+        fetchUrl = `${TRIVIA_API}&difficulty=${difficulty}`;
+    } else {
+        fetchUrl = `${TRIVIA_API}&category=${raffledCategory}`;
+    }
+    
+    const triviaQuestionsList = await fetch(fetchUrl)
         .then(response => response.json())
         .then(jsonPromise => {
             
@@ -196,11 +202,8 @@ const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" functio
     score = undefined;
     questionsList = undefined;
     avaiableQuestionsList = undefined;
-    answeredQuestionsList = [];
-    //fillignLists(MAX_QUESTIONS);
-    //currentQuestion = questionsList[0];
+    answeredQuestions = undefined;
     btn_prev.disabled = true;
-    //renderScreen();
 }; // resetQuiz()
 
 /* getRandomQuestion = () => { //The function destined to raffle some question.
@@ -227,6 +230,13 @@ const renderScreen = async () => {
     }
     
     lbl_answersLits.forEach(answer => { // Styling answers:
+        console.log(currentQuestion.selectedAnswer);
+        console.log(answer.dataset["number"]);
+
+        if (currentQuestion.selectedAnswer === 0) {
+            
+        }
+
         if (currentQuestion.selectedAnswer === Number(answer.dataset["number"])) {
             answer.parentElement.classList.add("selected-answer");
         } else {
@@ -237,11 +247,11 @@ const renderScreen = async () => {
     lbl_hud.innerText = `Questão: ${currentQuestion.questionNumber} de ${questionsList.length}`;
 
     //Updating the preogress bar:
-    const newWidth = Math.round((answeredQuestionsList.length / MAX_QUESTIONS) * 100);
+    const newWidth = Math.round((answeredQuestions / MAX_QUESTIONS) * 100);
     lbl_progressBar.innerText = `${newWidth}%`;
     progressBarContent.style.width = `${newWidth}%`;
     
-    if (answeredQuestionsList.length === MAX_QUESTIONS) {
+    if (answeredQuestions === MAX_QUESTIONS) {
         //console.log("All the questions has aswers.\nEneabling the btn_finish");
         btn_finish.hidden = false;
     } else if (!btn_finish.hidden) {
