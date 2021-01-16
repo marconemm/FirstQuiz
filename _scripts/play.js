@@ -11,6 +11,7 @@ class Question {
         this.correctAnswer = correctAnswer;
         this.answersList = incorrectAnswers;
         this.selectedAnswer = undefined;
+        this.selectedAnswerChar = undefined;
     }
 };
 
@@ -76,9 +77,18 @@ btn_finish.addEventListener('click', e => {
 for (let i = 0; i < choicesOptions.length; i++) {
     
     choicesOptions[i].addEventListener('click', e => {
-        const clickedOption = Number(choicesOptions[i].dataset["option"]);
-
-        currentQuestion.selectedAnswer = (currentQuestion.selectedAnswer !== clickedOption) ? clickedOption : undefined;
+        const clickedOptionChar = e.path[0].firstElementChild.innerText;
+        const clickedOptionText = e.path[0].lastElementChild.innerText;
+       
+        if (currentQuestion.selectedAnswerChar !== clickedOptionChar) {
+            
+            currentQuestion.selectedAnswerChar = clickedOptionChar;
+            currentQuestion.selectedAnswer = clickedOptionText;
+            
+        } else {
+            currentQuestion.selectedAnswerChar = undefined;
+            currentQuestion.selectedAnswer = undefined;
+        }
         
         let count = 0;
         questionsList.forEach(question => {
@@ -178,15 +188,14 @@ const renderScreen = async isToRenderTheTexts => {
         for (let i = 0; i < choicesOptions.length; i++) {
             
             choicesOptions[i].innerHTML = `<span class="lbl_choiceOption">${choicesOptions[i].dataset["char"]}</span>
-            <input class="radioStyles" type="radio" name="rbAnswers" id="op_1">
-            <span class="lbl_choiceText">${currentQuestion.answersList[i]}</span>`
+            <span class="lbl_choiceText" id="${i}" >${currentQuestion.answersList[i]}</span>`
         }
 
     }
     
     choicesOptions.forEach(option => { //Styling answers:
-
-        if (currentQuestion.selectedAnswer === Number(option.dataset["option"])) {
+        
+        if (currentQuestion.selectedAnswerChar === option.dataset["char"]) {
             option.classList.add("selected-answer");
         } else {
             option.classList.remove("selected-answer");
