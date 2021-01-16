@@ -26,7 +26,6 @@ const btn_next = document.getElementById("btn_next");
 const btn_finish = document.getElementById("btn_finish");
 
 //creating the variabes:
-let score;
 let questionsList;
 let answeredQuestions;
 let currentQuestion;
@@ -69,9 +68,23 @@ btn_next.addEventListener('click', e => {
 });
 
 btn_finish.addEventListener('click', e => {
+    
     if (answeredQuestions === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
+        
+        let correctAswers = 0;
+        questionsList.forEach(question => {
+           
+            if (question.correctAnswer === question.selectedAnswer) {
+                correctAswers++;
+            }
+            
+        });
+
+        sessionStorage.setItem("score", JSON.stringify(correctAswers));
+
         return window.location.assign("./scores.html");
     }
+
 });
 
 for (let i = 0; i < choicesOptions.length; i++) {
@@ -170,7 +183,6 @@ const fetchQuestions = async (amount, difficulty) => {
 }; //fetchQuestions
 
 const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
-    score = undefined;
     questionsList = undefined;
     avaiableQuestionsList = undefined;
     answeredQuestions = 0;
