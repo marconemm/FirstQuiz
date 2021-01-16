@@ -3,19 +3,44 @@
     margin: 1rem auto;
 }
 
-#playerName {
+.txt_style {
+    color: #fe5500;
+}
+
+#txtBox_playerName {
     width: 15rem;
+    height: 2rem;
+    border-radius: 0.4rem;
+}
+
+#txtBox_playerName::placeholder {
+    color: #f58969;
+}
+
+#txtBox_playerName:focus {
+    color: #ffffff;
+    background-color: #7f4d3b;
+    outline: 0;
+}
+
+#dificultSelector {
+    background-color: #ffffff;
+    width: 50%;
     height: 2rem;
     border-radius: 0.4rem;
     margin-top: 0.3rem;
 }
 
-#playerName::placeholder {
+#configPanel {
+    display: grid;
+    background: #ffffff;
     color: #fe5500;
-
+    border-radius: 0.3rem;
+    margin-top: 0.8rem;
+    padding: 0.5rem;
+    box-shadow: 0.2rem 0.2rem 0.4rem 0 #363636; /*X offset, Y offset, Blur radious, Blur offset and the shadow color*/
 }
 
-#playerName:focus {
-    color: #ffffff;
-    background-color: #7f4d3b
+.radioStyles {
+    margin-right: 0.3rem;
 }
