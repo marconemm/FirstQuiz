@@ -19,9 +19,6 @@ const lbl_hud = document.getElementById("lbl_hud");
 const progressBarContent = document.getElementById("loadingBarContent");
 const lbl_progressBar = document.getElementById("lbl_progressBar");
 const lbl_question = document.getElementById("lbl_question");
-// const lbl_choiceOptions = Array.from(document.getElementsByClassName("lbl_choiceOption")); //convert to an Array
-// const rb_choiceOptions = Array.from(document.getElementsByClassName("radioStyles"));//convert to an Array
-// const lbl_answers = Array.from(document.getElementsByClassName("bl_choiceText")); //convert to an Array
 const choicesOptions = Array.from(document.getElementsByClassName("choice-container")); //convert to an Array
 const btn_prev = document.getElementById("btn_prev");
 const btn_next = document.getElementById("btn_next");
@@ -30,7 +27,6 @@ const btn_finish = document.getElementById("btn_finish");
 //creating the variabes:
 let score;
 let questionsList;
-//let avaiableQuestionsList;
 let answeredQuestions;
 let currentQuestion;
 let raffledCategory;
@@ -97,57 +93,6 @@ for (let i = 0; i < choicesOptions.length; i++) {
 
     }); 
 }
-/*
-choicesOptions.forEach(option => {
-    option.parentElement.addEventListener('click', e => { //adding the "click" event listener on the option container (the parent).
-        const selectedChoice = e.target;
-        console.log(selectedChoice.dataset["option"]);
-        currentQuestion.selectedAnswer = Number(selectedChoice.dataset["option"]);
-        
-        // choicesOptions.forEach(rb => {
-        //     if (rb.checked) {
-        //         console.log(rb);
-        //         //console.log(rb.label);
-        //         console.log(lbl_choiceOptions);
-        //         rb.checked = false;
-        //     }
-        // });
-        
-
-        //console.log("\n\n");
-        renderScreen();
-        
-        // let isToPushQuestion = true;
-
-        // for (let i = 0; i < answeredQuestionsList.length; i++) {
-
-        //     if (answeredQuestionsList[i].number === currentQuestion.number) { //Updates the answeres questions list:
-        //         isToPushQuestion = false;
-
-        //         if (currentQuestion.selectedAnswer === null || answeredOption !== currentQuestion.selectedAnswer) {
-        //             //console.log(`Updating the answer ${answeredOption} to the question number ${currentQuestion.number}.`);
-        //             currentQuestion.selectedAnswer = answeredOption;
-        //             answeredQuestionsList[i].selectedAnswer = answeredOption;
-        //         }
-        //         else {
-        //             //console.log(`Nulling the answer from the question number ${currentQuestion.number}.`);
-        //             currentQuestion.selectedAnswer = null;
-        //             answeredQuestionsList.splice(i,1); //removes the nulled answer from answeredQuestionsList.
-        //         }
-
-        //         break;
-        //     }
-        // }
-
-        // if (isToPushQuestion) {
-        //     // console.log(`Pushing the question number ${currentQuestion.number}. into answered questions list.`);
-        //     currentQuestion.selectedAnswer = answeredOption; //updates the asweredOption.
-        //     answeredQuestionsList.push(currentQuestion);
-        // }
-        //renderScreen();
-    });
-});
-*/
 
 // Creating the functions:
 const raflleCategory = async () => {
@@ -214,50 +159,14 @@ const fetchQuestions = async (amount, difficulty) => {
 
 }; //fetchQuestions
 
-/*const fillignLists = numberOfQuestions => { //A temp function destinated to fill the processes's lists;
-
-    for (let i = 1; i <= numberOfQuestions; i++) {
-        const correctAnswer = Math.floor(Math.random() * 4);
-        const answersList = [];
-
-        for (let j = 1; j <= 4; j++) {
-            const lbl_answerTxt = `Resposta ${j} da questão ${i}`;
-            answersList.push(lbl_answerTxt);
-        }
-
-        const lbl_questionTxt = `Qual a resposta para esta questão?`;
-
-        avaiableQuestionsList.push(new Question(i, lbl_questionTxt, answersList, correctAnswer));
-    };
-
-    questionsList = [...avaiableQuestionsList]; //make a copy of the questions list.
-
-}; // fillignLists(numerOfQuestions)
-*/
-
 const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     score = undefined;
     questionsList = undefined;
     avaiableQuestionsList = undefined;
-    answeredQuestions = undefined;
+    answeredQuestions = 0;
     btn_prev.disabled = true;
     fetchQuestions(MAX_QUESTIONS, difficulty);
 }; // resetQuiz()
-
-/* getRandomQuestion = () => { //The function destined to raffle some question.
-
-    if (avaiableQuestionsList.length === 0) { // if true, goes to the "scores page" (./game/scores.html)
-        return window.location.assign("./scores.html");
-    }
-
-    const questionIndex = Math.floor(Math.random() * avaiableQuestionsList.length); //raffling a smaller random number than available Questions List's length.
-    raffledQuestion = avaiableQuestionsList[questionIndex]; //selecting the raffled question.
-
-    acceptingAnswers = true; // changing the falg "acceptingAnswers".
-    avaiableQuestionsList.splice(questionIndex, 1); //remove the raffled question from the avaiable list.
-
-    return raffledQuestion;
-}; // getRandomQuestion( ... )  */
 
 const renderScreen = async isToRenderTheTexts => {
     
