@@ -1,19 +1,4 @@
-class Player {
-    constructor (name){
-        this.name = name;
-    }
-}
-
-class Question {
-    constructor(questionTxt, incorrectAnswers, correctAnswer) {
-        this.questionNumber = undefined;
-        this.questionTxt = questionTxt;
-        this.correctAnswer = correctAnswer;
-        this.answersList = incorrectAnswers;
-        this.selectedAnswer = undefined;
-        this.selectedAnswerChar = undefined;
-    }
-};
+import {Question} from "./classes.js";
 
 //Creating the constants from HTML:
 const lbl_hud = document.getElementById("lbl_hud");
@@ -181,7 +166,7 @@ const fetchQuestions = async (amount, difficulty) => {
 
 const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     questionsList = undefined;
-    avaiableQuestionsList = undefined;
+    //avaiableQuestionsList = undefined;
     answeredQuestions = 0;
     btn_prev.disabled = true;
     fetchQuestions(MAX_QUESTIONS, difficulty);
