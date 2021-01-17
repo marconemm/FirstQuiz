@@ -53,16 +53,13 @@ btn_finish.addEventListener('click', e => {
     
     if (answeredQuestions === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
         
-        let correctAswers = 0;
-        questionsList.forEach(question => {
-           
-            if (question.correctAnswer === question.selectedAnswer) {
-                correctAswers++;
-            }
+        const correctAnswers = questionsList.reduce((count, question) => {
+            (question.correctAnswer === question.selectedAnswer) ? count++ : false;
             
-        });
+            return count;
+        }, 0);
 
-        sessionStorage.setItem("correctAswers", JSON.stringify(correctAswers));
+        sessionStorage.setItem("correctAswers", JSON.stringify(correctAnswers));
 
         return window.location.assign("./scores.html");
     }
@@ -84,15 +81,12 @@ for (let i = 0; i < choicesOptions.length; i++) {
             currentQuestion.selectedAnswerChar = undefined;
             currentQuestion.selectedAnswer = undefined;
         }
-        
-        let count = 0;
-        questionsList.forEach(question => {
-            if (question.selectedAnswer !== undefined) {
-                count++;
-            }
-        });
 
-        answeredQuestions = count;
+        answeredQuestions = questionsList.reduce((count, question) => {
+            (question.selectedAnswer !== undefined) ? count++ : false;
+            
+            return count;
+        },0);
 
         renderScreen(false);
 
@@ -154,7 +148,7 @@ const fetchQuestions = async (amount, difficulty) => {
         fetchUrl = `${TRIVIA_API}&category=${raffledCategory}`;
     }
     
-    const triviaQuestionsList = await fetch(fetchUrl)
+    await fetch(fetchUrl)
         .then(response => response.json())
         .then(jsonPromise => {
             
