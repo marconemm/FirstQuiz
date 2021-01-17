@@ -1,11 +1,11 @@
 //Creating the constants from HTML:
 const resultBox = document.getElementById("resultBox");
-const scoresTable = document.getElementById("highSocreTable");
+const historyTable = document.getElementById("highSocreTable");
 
 //Geting the sessionStorage values:
 const correctAnswers = Number(sessionStorage.getItem("correctAswers"));
 const playerName = sessionStorage.getItem("playerName");
-const scoreHistoryList = JSON.parse(localStorage.getItem("scoreHistoryList"));
+const playersHistoryList = JSON.parse(localStorage.getItem("playersHistoryList"));
 
 
 // Creating the functions:
@@ -22,26 +22,23 @@ const saveTheResult = () => {
         score: getScore()
     };
     
-    if (scoreHistoryList !== null) {
+    if (playersHistoryList !== null) {
         
-        scoreHistoryList.push(dataToSave);
-        localStorage.setItem("scoreHistoryList", JSON.stringify(scoreHistoryList));
+        playersHistoryList.push(dataToSave);
+        localStorage.setItem("playersHistoryList", JSON.stringify(playersHistoryList));
 
     }
 }; // saveTheResult()
 
-const renderScreen = () => {
-    setGreeting();
-
-    const btn_save = document.getElementById("btn_save");
-
-    btn_save.addEventListener("click", e => {
-        saveTheResult();
+const setHistoryTable = () => {
+    playersHistoryList.sort((scoreA, scoreB) => { // sort the "playersHistoryList" by "high scores first":
+        return (scoreA.score < scoreB.score) ? 1 : (scoreA.score > scoreB.score) ? -1 : 0;
     });
 
-} // renderScreen()
+    console.log(playersHistoryList);
+}; // setHistoryTable();
 
-const setGreeting = () => {
+const setResultBox = () => {
 
     if (correctAnswers >= 9) {
         
@@ -80,7 +77,19 @@ const setGreeting = () => {
         <h2>Infelizmente Você errou todas as questões.</h2>`
     }
 
-}; // setGreeting()
+}; // setResultBox()
+
+const renderScreen = () => {
+    setResultBox();
+    setHistoryTable();
+
+    const btn_save = document.getElementById("btn_save");
+
+    btn_save.addEventListener("click", e => {
+        saveTheResult();
+    });
+
+} // renderScreen()
 
 // Adding the Event listeners:
 
