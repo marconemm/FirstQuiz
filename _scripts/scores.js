@@ -1,14 +1,11 @@
 //Creating the constants from HTML:
 const resultBox = document.getElementById("resultBox");
-const historyTable = document.getElementById("highSocreTable");
+const historyTable = document.getElementById("scoresTable");
 
 //Geting the sessionStorage values:
 const correctAnswers = Number(sessionStorage.getItem("correctAswers"));
 const playerName = sessionStorage.getItem("playerName");
 const playersHistoryList = JSON.parse(localStorage.getItem("playersHistoryList"));
-
-// console.log(sessionStorage.getItem("difficulty"));
-
 
 // Creating the functions:
 const getScore = () => {
@@ -27,7 +24,6 @@ const getScore = () => {
     }, 1);
 
     return (score - 1);
-
 }; // getScore()
 
 const saveTheResult = () => {
@@ -42,6 +38,7 @@ const saveTheResult = () => {
         playersHistoryList.splice(10,1); // limit the playersHistoryList.length to 10.
         localStorage.setItem("playersHistoryList", JSON.stringify(playersHistoryList));
     }
+    setHistoryTable();
 }; // saveTheResult()
 
 const setHistoryTable = () => {
@@ -50,6 +47,11 @@ const setHistoryTable = () => {
         return (scoreA.score < scoreB.score) ? 1 : (scoreA.score > scoreB.score) ? -1 : 0;
     });
 
+    // Set the "historyTable" HTML:
+    historyTable.innerHTML = playersHistoryList.reduce((newHTML, history) => 
+        newHTML += `<tr> <td>${history.playerName}</td>
+        <td>${history.score}</td></tr>`
+        , historyTable.innerHTML);
 }; // setHistoryTable();
 
 const setResultBox = () => {
@@ -104,9 +106,5 @@ const renderScreen = () => {
     });
 
 } // renderScreen()
-
-// Adding the Event listeners:
-
-
 
 renderScreen();
