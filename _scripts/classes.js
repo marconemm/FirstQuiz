@@ -1,6 +1,7 @@
 export class Question {
-    constructor(questionTxt, incorrectAnswers, correctAnswer) {
-        this.questionNumber = undefined;
+    constructor(questionNumber, difficulty, questionTxt, incorrectAnswers, correctAnswer) {
+        this.difficulty = difficulty;
+        this.questionNumber = questionNumber;
         this.questionTxt = questionTxt;
         this.correctAnswer = correctAnswer;
         this.answersList = incorrectAnswers;

@@ -7,11 +7,26 @@ const correctAnswers = Number(sessionStorage.getItem("correctAswers"));
 const playerName = sessionStorage.getItem("playerName");
 const playersHistoryList = JSON.parse(localStorage.getItem("playersHistoryList"));
 
+// console.log(sessionStorage.getItem("difficulty"));
+
 
 // Creating the functions:
 const getScore = () => {
+    const questionsList = JSON.parse(sessionStorage.getItem("questionsList"));
+    
+    const score = questionsList.reduce((count, question ) => {
+        if (question.selectedAnswer === question.correctAnswer) {
+            if (question.difficulty === "easy")
+                count += count * 33
+            else if (question.difficulty === "medium")
+                count += count * 66
+            else
+                count += count * 99
+        }
+        return count;
+    }, 1);
 
-    return 99 * correctAnswers;
+    return (score - 1);
 
 }; // getScore()
 
@@ -23,25 +38,24 @@ const saveTheResult = () => {
     };
     
     if (playersHistoryList !== null) {
-        
         playersHistoryList.push(dataToSave);
+        playersHistoryList.splice(10,1); // limit the playersHistoryList.length to 10.
         localStorage.setItem("playersHistoryList", JSON.stringify(playersHistoryList));
-
     }
 }; // saveTheResult()
 
 const setHistoryTable = () => {
+
     playersHistoryList.sort((scoreA, scoreB) => { // sort the "playersHistoryList" by "high scores first":
         return (scoreA.score < scoreB.score) ? 1 : (scoreA.score > scoreB.score) ? -1 : 0;
     });
 
-    console.log(playersHistoryList);
 }; // setHistoryTable();
 
 const setResultBox = () => {
 
     if (correctAnswers >= 9) {
-        
+
         resultBox.innerHTML = `<h1>Parabéns, ${playerName}!</h1>
         <label for="result">Você acertou</label>
         <h2 id="result">${correctAnswers} questões!</h2>

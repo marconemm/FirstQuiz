@@ -31,8 +31,7 @@ btn_prev.addEventListener('click', e => {
         btn_next.disabled = false; // eneabling the "btn_next".
         if (currentQuestion.questionNumber === 1) {
             btn_prev.disabled = true; // disabling the "btn_next".
-        }
-        // setTimeout(renderScreen(),WAIT_TIME);
+        };
         renderScreen(true);
     }
 });
@@ -52,14 +51,9 @@ btn_next.addEventListener('click', e => {
 btn_finish.addEventListener('click', e => {
     
     if (answeredQuestions === MAX_QUESTIONS) { // if true, goes to the "scores page" (./game/scores.html)
-        
-        const correctAnswers = questionsList.reduce((count, question) => {
-            (question.correctAnswer === question.selectedAnswer) ? count++ : false;
-            
-            return count;
-        }, 0);
-
-        sessionStorage.setItem("correctAswers", JSON.stringify(correctAnswers));
+    
+        console.log(questionsList);
+        sessionStorage.setItem("questionsList", JSON.stringify(questionsList));
 
         return window.location.assign("./scores.html");
     }
@@ -84,7 +78,6 @@ for (let i = 0; i < choicesOptions.length; i++) {
 
         answeredQuestions = questionsList.reduce((count, question) => {
             (question.selectedAnswer !== undefined) ? count++ : false;
-            
             return count;
         },0);
 
@@ -100,32 +93,32 @@ const raflleCategory = async () => {
     .then(response => response.json()) // parse the response promise to a JSON promise
     .then(jsonPromise => { // raffle a category from the "jsonPromise":
     
-    const raffledIndex = Math.round(Math.random() * jsonPromise.trivia_categories.length);
-            raffledCategory = jsonPromise.trivia_categories[raffledIndex].id;
+        const raffledIndex = Math.round(Math.random() * jsonPromise.trivia_categories.length);
+        raffledCategory = jsonPromise.trivia_categories[raffledIndex].id;
             
-        });
-        
-        
+    });
 }; //raflleCategory
     
 const mapQuestionsList = async fetchResult => {
-
+    
+    let i = 1;
     questionsList = await fetchResult.map(question => {
+        const result = new Question(
+            i,
+            question.difficulty,
+            question.question,
+            question.incorrect_answers,
+            question.correct_answer);
+            
+        i++;
         
-        return new Question(question.question, question.incorrect_answers, question.correct_answer);
-        
+        return result;
     });
     
     questionsList.forEach(question => { // insert the correct answer in an answersList's random index:
         const index = Math.floor(Math.random() * (question.answersList.length + 1));
         question.answersList.splice(index,0,question.correctAnswer);
     });
-
-    for (let i = 0; i < questionsList.length; i++) {
-        
-        questionsList[i].questionNumber = i + 1;
-        
-    }
     
     currentQuestion = questionsList[0];
     renderScreen(true);
@@ -160,7 +153,6 @@ const fetchQuestions = async (amount, difficulty) => {
 
 const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" function).
     questionsList = undefined;
-    //avaiableQuestionsList = undefined;
     answeredQuestions = 0;
     btn_prev.disabled = true;
     fetchQuestions(MAX_QUESTIONS, difficulty);
