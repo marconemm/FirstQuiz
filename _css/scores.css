@@ -1,10 +1,6 @@
-.resultBox {
+#resultBox {
     width: 95%;
     border: 1px solid #ffffff;
-}
-
-#resultGreeting {
-    margin-bottom: 1rem;
 }
 
 #scoresTable {

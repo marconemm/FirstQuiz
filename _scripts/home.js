@@ -11,7 +11,7 @@ btn_play.disabled = txtBox_playerName.value.length !== 0 ? false : true;
 });
 
 const startQuiz = () => { //startig the Quiz.
-    sessionStorage.setItem("playerName", JSON.stringify(txtBox_playerName.value));
+    sessionStorage.setItem("playerName", txtBox_playerName.value);
     sessionStorage.setItem("difficulty", JSON.stringify(difficultySelector.value));
     sessionStorage.setItem("isRandomCategory", JSON.stringify(randomCategories[0].checked ? true : false));
     window.location.assign("/game/play.html");

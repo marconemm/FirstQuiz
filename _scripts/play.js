@@ -33,9 +33,6 @@ let raffledCategory;
 const difficulty = JSON.parse(sessionStorage.getItem("difficulty"));
 const isRandomCategory = JSON.parse(sessionStorage.getItem("isRandomCategory"));
 
-// creating the Objects:
-const player = new Player(JSON.parse(sessionStorage.getItem("playerName")));
-
 //creating the processing's constants:
 const CORRECT_SCORE = 10;
 const MAX_QUESTIONS = 10;
@@ -80,7 +77,7 @@ btn_finish.addEventListener('click', e => {
             
         });
 
-        sessionStorage.setItem("score", JSON.stringify(correctAswers));
+        sessionStorage.setItem("correctAswers", JSON.stringify(correctAswers));
 
         return window.location.assign("./scores.html");
     }

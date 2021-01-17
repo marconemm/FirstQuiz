@@ -15,6 +15,7 @@
 
 h1,h2,h3 {
     color: #ffffff;
+    margin-bottom: 1rem;
 }
 
 /*Utilities*/
@@ -101,4 +102,11 @@ label {
 
 .btn:disabled:hover {
     cursor: initial;
+}
+
+.btn:active {
+    transform: translateY(0.05rem);
+    transition: 25ms;
+    color: #7f4d3b;
+
 }
