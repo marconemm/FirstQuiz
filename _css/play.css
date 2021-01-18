@@ -94,3 +94,23 @@
 .lbl_choiceText:hover {
     cursor: pointer;
 }
+
+/* Loader */
+
+#loader {
+    height: 3rem;
+    width: 3rem;
+    border: 0.4rem solid #ffffff;
+    border-left: 0.5rem double #7f4d3b;
+    border-radius: 50%;
+    animation: spin 670ms linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

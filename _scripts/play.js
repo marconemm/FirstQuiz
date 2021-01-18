@@ -123,6 +123,10 @@ const mapQuestionsList = async fetchResult => {
     currentQuestion = questionsList[0];
     renderScreen(true);
 
+    const loaderBox = document.getElementById("loaderBox");
+    const gameBox = document.getElementById("gameBox");
+    loaderBox.classList.add("hidden");
+    gameBox.classList.remove("hidden");
 }; //mapQuestionsList
 
 const fetchQuestions = async (amount, difficulty) => {
