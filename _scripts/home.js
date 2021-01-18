@@ -15,4 +15,9 @@ const startQuiz = () => { //startig the Quiz.
     sessionStorage.setItem("difficulty", JSON.stringify(difficultySelector.value));
     sessionStorage.setItem("isRandomCategory", JSON.stringify(randomCategories[0].checked ? true : false));
     window.location.assign("/game/play.html");
-};
+}; // startQuiz()
+
+const goToHistories = () => {
+    sessionStorage.removeItem("playerName");
+    window.location.assign("/game/scores.html");
+}; // goToHistories()
