@@ -161,9 +161,9 @@ const resetQuiz = () => { // It's a ES6 arrow function (The "start quiz" functio
 const renderScreen = async isToRenderTheTexts => {
     
     if (isToRenderTheTexts) { //rendering HTML's texts:
-        lbl_hud.innerText = `Questão: ${currentQuestion.questionNumber} de ${questionsList.length}`;
+        lbl_hud.innerHTML = `Questão: ${currentQuestion.questionNumber} de ${questionsList.length}`;
         
-        lbl_question.innerText = currentQuestion.questionTxt;
+        lbl_question.innerHTML = currentQuestion.questionTxt;
         
         for (let i = 0; i < choicesOptions.length; i++) {
             
